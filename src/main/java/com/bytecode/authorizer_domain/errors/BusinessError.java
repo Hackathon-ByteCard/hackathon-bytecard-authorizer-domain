@@ -8,7 +8,8 @@ public enum BusinessError {
     INVALID_AUTHORIZATION_AMOUNT("invalid-authorization-amount", ErrorNature.FUNCTIONAL),
     INVALID_AUTHORIZATION_DESCRIPTION("invalid-authorization-description", ErrorNature.FUNCTIONAL),
     INVALID_AUTHORIZATION_TIME("invalid-authorization-time", ErrorNature.FUNCTIONAL),
-    UNSUFFICIENT_BALANCE("unsufficient-balance", ErrorNature.FUNCTIONAL);
+    INSUFFICIENT_BALANCE("insufficient-balance", ErrorNature.FUNCTIONAL),
+    BLOCKED_CARD("blocked-card", ErrorNature.FUNCTIONAL);
 
     private String code;
     private ErrorNature nature;

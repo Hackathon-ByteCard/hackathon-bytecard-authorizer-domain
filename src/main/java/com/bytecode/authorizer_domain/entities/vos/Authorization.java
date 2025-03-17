@@ -1,6 +1,5 @@
 package com.bytecode.authorizer_domain.entities.vos;
 
-import com.bytecode.authorizer_domain.entities.Card;
 import com.bytecode.authorizer_domain.errors.AuthorizerDomainException;
 import com.bytecode.authorizer_domain.errors.BusinessError;
 
@@ -9,27 +8,14 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public record Authorization(
-        Card card,
         BigDecimal amount,
         String description,
         LocalDateTime time
 ) {
-    public Authorization(final Card card, final BigDecimal amount, final String description, final LocalDateTime time) {
-        validateCard(card);
+    public Authorization {
         validateAuthorizationAmount(amount);
         validateDescription(description);
         validateTime(time);
-
-        this.card = card;
-        this.amount = amount;
-        this.description = description;
-        this.time = time;
-    }
-
-    private void validateCard(final Card card) {
-        if(Objects.isNull(card)) {
-            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "card should not be null");
-        }
     }
 
     private void validateAuthorizationAmount(final BigDecimal amount) {
