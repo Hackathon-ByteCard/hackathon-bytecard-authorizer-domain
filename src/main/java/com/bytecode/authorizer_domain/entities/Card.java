@@ -59,4 +59,12 @@ public class Card {
             throw new AuthorizerDomainException(BusinessError.INVALID_PAYMENT_AMOUNT, "payment amount should not be less or equal to zero");
         }
     }
+
+    public void block() {
+        this.blockedSince = LocalDateTime.now();
+    }
+
+    public void unblock() {
+        this.blockedSince = null;
+    }
 }
