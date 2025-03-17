@@ -1,6 +1,6 @@
-package com.bytecode.authorizer_domain.events;
+package com.bytecode.authorizer_domain.events.impls;
 
-import com.bytecode.authorizer_domain.entities.vos.Authorization;
+import com.bytecode.authorizer_domain.entities.Authorization;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

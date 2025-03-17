@@ -1,10 +1,11 @@
-package com.bytecode.authorizer_domain.entities;
+package com.bytecode.authorizer_domain.services;
 
-import com.bytecode.authorizer_domain.entities.vos.Authorization;
-import com.bytecode.authorizer_domain.entities.vos.Cancellation;
+import com.bytecode.authorizer_domain.entities.Authorization;
+import com.bytecode.authorizer_domain.entities.Cancellation;
+import com.bytecode.authorizer_domain.entities.Card;
 import com.bytecode.authorizer_domain.errors.AuthorizerDomainException;
 import com.bytecode.authorizer_domain.errors.BusinessError;
-import com.bytecode.authorizer_domain.events.ClearingEvent;
+import com.bytecode.authorizer_domain.events.impls.ClearingEvent;
 import com.bytecode.authorizer_domain.events.EventPublisher;
 import com.bytecode.authorizer_domain.repositories.AuthorizationRepository;
 import com.bytecode.authorizer_domain.repositories.CancellationRepository;
@@ -25,7 +26,7 @@ public class ConciliationService {
     private static final int MAX_CANCELLATION_PERIOD_IN_DAYS = 7;
 
     public void conciliate(final Card card, final Authorization conciliation)  {
-        var originalAuthorization = this.authorizationRepository.findOne(conciliation.code());
+        var originalAuthorization = this.authorizationRepository.findOne(conciliation.getCode());
         if(Objects.isNull(originalAuthorization)) {
             throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "findOne should always return an optional instance");
         }

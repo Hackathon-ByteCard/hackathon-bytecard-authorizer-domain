@@ -1,6 +1,4 @@
-package com.bytecode.authorizer_domain.entities.vos;
-
-import com.bytecode.authorizer_domain.entities.Card;
+package com.bytecode.authorizer_domain.entities;
 
 import java.time.LocalDateTime;
 

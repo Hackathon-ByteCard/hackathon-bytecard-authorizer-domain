@@ -1,7 +1,7 @@
 package com.bytecode.authorizer_domain.repositories;
 
 import com.bytecode.authorizer_domain.entities.Card;
-import com.bytecode.authorizer_domain.entities.vos.Cancellation;
+import com.bytecode.authorizer_domain.entities.Cancellation;
 
 import java.time.LocalDateTime;
 

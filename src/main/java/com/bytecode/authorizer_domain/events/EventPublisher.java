@@ -1,5 +1,7 @@
 package com.bytecode.authorizer_domain.events;
 
+import com.bytecode.authorizer_domain.events.impls.DomainEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
