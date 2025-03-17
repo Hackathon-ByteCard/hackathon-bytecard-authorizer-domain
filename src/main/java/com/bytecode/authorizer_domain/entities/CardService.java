@@ -5,6 +5,8 @@ import com.bytecode.authorizer_domain.repositories.AuthorizationRepository;
 import com.bytecode.authorizer_domain.repositories.CardRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 @RequiredArgsConstructor
 public class CardService {
     private final AuthorizationRepository authorizationRepository;
@@ -17,5 +19,10 @@ public class CardService {
         this.cardRepository.save(card);
 
         return authorization;
+    }
+
+    public void restoreLimit(final Card card, final BigDecimal paymentAmount) {
+        card.addToAvailableLimit(paymentAmount);
+        this.cardRepository.save(card);
     }
 }

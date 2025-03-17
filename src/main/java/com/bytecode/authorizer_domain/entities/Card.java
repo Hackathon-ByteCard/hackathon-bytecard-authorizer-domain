@@ -44,4 +44,19 @@ public class Card {
             throw new AuthorizerDomainException(BusinessError.INSUFFICIENT_BALANCE, "available limit smaller than the authorization amount");
         }
     }
+
+    public void addToAvailableLimit(BigDecimal paymentAmount) {
+        validatePaymentAmount(paymentAmount);
+        this.availableLimit = this.availableLimit.add(paymentAmount);
+    }
+
+    private void validatePaymentAmount(final BigDecimal paymentAmount) {
+        if(Objects.isNull(paymentAmount)) {
+            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "payment amount should not be null");
+        }
+
+        if(paymentAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new AuthorizerDomainException(BusinessError.INVALID_PAYMENT_AMOUNT, "payment amount should not be less or equal to zero");
+        }
+    }
 }

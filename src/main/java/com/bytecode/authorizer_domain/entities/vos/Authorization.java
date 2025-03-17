@@ -6,12 +6,20 @@ import com.bytecode.authorizer_domain.errors.BusinessError;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public record Authorization(
         BigDecimal amount,
         String description,
-        LocalDateTime time
+        LocalDateTime time,
+        UUID code
 ) {
+    public Authorization(final BigDecimal amount,
+                         final String description,
+                         final LocalDateTime time) {
+        this(amount, description, time, UUID.randomUUID());
+    }
+
     public Authorization {
         validateAuthorizationAmount(amount);
         validateDescription(description);
