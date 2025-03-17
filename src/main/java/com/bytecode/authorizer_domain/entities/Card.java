@@ -45,7 +45,7 @@ public class Card {
         validateBlockingRules();
         validateAvailableLimit(authorization);
 
-        this.availableLimit = this.availableLimit.subtract(authorization.getAmount());
+        this.availableLimit = this.availableLimit.subtract(authorization.amount());
     }
 
     private void validateBlockingRules() {
@@ -59,7 +59,7 @@ public class Card {
             throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "authorization should not be null");
         }
 
-        if(this.availableLimit.compareTo(authorization.getAmount()) < 0) {
+        if(this.availableLimit.compareTo(authorization.amount()) < 0) {
             throw new AuthorizerDomainException(BusinessError.INSUFFICIENT_BALANCE, "available limit smaller than the authorization amount");
         }
     }

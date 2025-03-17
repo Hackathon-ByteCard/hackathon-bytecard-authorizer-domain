@@ -26,7 +26,7 @@ public class ConciliationService {
     private static final int MAX_CANCELLATION_PERIOD_IN_DAYS = 7;
 
     public void conciliate(final Card card, final Authorization conciliation)  {
-        var originalAuthorization = this.authorizationRepository.findOne(conciliation.getCode());
+        var originalAuthorization = this.authorizationRepository.findOne(conciliation.code());
         if(Objects.isNull(originalAuthorization)) {
             throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "findOne should always return an optional instance");
         }
