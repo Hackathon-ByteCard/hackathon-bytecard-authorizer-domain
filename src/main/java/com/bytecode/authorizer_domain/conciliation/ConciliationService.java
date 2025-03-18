@@ -6,6 +6,8 @@ import com.bytecode.authorizer_domain.card.Card;
 import com.bytecode.authorizer_domain.card.CardService;
 import com.bytecode.authorizer_domain.shared.bus.events.ClearingEvent;
 import com.bytecode.authorizer_domain.shared.bus.EventPublisher;
+import com.bytecode.authorizer_domain.shared.errors.AuthorizerDomainException;
+import com.bytecode.authorizer_domain.shared.errors.BusinessError;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
@@ -14,33 +16,26 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ConciliationService {
-    private final CancellationRepository cancellationRepository;
-
-    private final CardService cardService;
     private final AuthorizationService authorizationService;
+    private final CancellationService cancellationService;
 
-    private static final int MAX_CANCELLATION_COUNT = 2;
-    private static final int MAX_CANCELLATION_PERIOD_IN_DAYS = 7;
-
-    public void conciliate(final UUID pan, final Authorization conciliation)  {
-        var card = this.cardService.findCard(pan);
-        var originalAuthorization = this.authorizationService.findAuthorization(conciliation);
-
+    public void conciliate(final Card card, final Authorization conciliation)  {
+        var originalAuthorization = this.findOriginalAuthorization(conciliation);
         if(conciliation.equals(originalAuthorization)) {
             EventPublisher.publish(new ClearingEvent(conciliation));
-        } else {
-            handleCancellation(card, conciliation);
+            return;
         }
+
+        this.cancellationService.handleCancellation(card, conciliation);
     }
 
-    private void handleCancellation(Card card, Authorization conciliation) {
-        this.cancellationRepository.save(new Cancellation(card, conciliation, LocalDateTime.now()));
+    private Authorization findOriginalAuthorization(final Authorization conciliation) {
+        var originalAuthorization = this.authorizationService.findAuthorization(conciliation.getCode());
 
-        var since = LocalDateTime.now().minus(Duration.ofDays(MAX_CANCELLATION_PERIOD_IN_DAYS));
-        var cancellationCount = this.cancellationRepository.count(card, since);
-        if(cancellationCount > MAX_CANCELLATION_COUNT) {
-            card.block();
-            this.cardService.save(card);
+        if(originalAuthorization.isEmpty()) {
+            throw new AuthorizerDomainException(BusinessError.ORIGINAL_AUTHORIZATION_NOT_FOUND, "original authorization must exist");
         }
+
+        return originalAuthorization.get();
     }
 }

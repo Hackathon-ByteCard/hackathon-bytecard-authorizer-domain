@@ -22,7 +22,7 @@ public class Card {
         this.blockedSince = blockedSince;
     }
 
-    public void pay(final Authorization authorization) {
+    protected void pay(final Authorization authorization) {
         validateBlockingRules();
         validateAvailableLimit(authorization);
 
@@ -45,7 +45,7 @@ public class Card {
         }
     }
 
-    public void addToAvailableLimit(BigDecimal paymentAmount) {
+    protected void addToAvailableLimit(BigDecimal paymentAmount) {
         validatePaymentAmount(paymentAmount);
         this.availableLimit = this.availableLimit.add(paymentAmount);
     }
@@ -60,11 +60,7 @@ public class Card {
         }
     }
 
-    public void block() {
+    protected void block() {
         this.blockedSince = LocalDateTime.now();
-    }
-
-    public void unblock() {
-        this.blockedSince = null;
     }
 }

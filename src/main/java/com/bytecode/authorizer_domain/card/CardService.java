@@ -1,40 +1,54 @@
 package com.bytecode.authorizer_domain.card;
 
+import com.bytecode.authorizer_domain.authorization.Authorization;
+import com.bytecode.authorizer_domain.conciliation.CancellationService;
 import com.bytecode.authorizer_domain.shared.errors.AuthorizerDomainException;
 import com.bytecode.authorizer_domain.shared.errors.BusinessError;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 public class CardService {
+    private static final int MAX_CANCELLATION_COUNT = 2;
+    private static final int MAX_CANCELLATION_PERIOD_IN_DAYS = 7;
+
+    private final CancellationService cancellationService;
+
     private final CardRepository cardRepository;
 
-    public Card findCard(UUID pan) {
-        var originalCard = this.cardRepository.findOne(pan);
-        if(Objects.isNull(originalCard)) {
-            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "findOne should always return an optional instance");
+    public void pay(final Card card, final Authorization authorization) {
+        card.pay(authorization);
+        this.cardRepository.save(card);
+    }
+
+    public Optional<Card> findCard(final UUID pan) {
+        var card = this.cardRepository.findOne(pan);
+
+        if(Objects.isNull(card)) {
+            return Optional.empty();
         }
 
-        if(originalCard.isEmpty()) {
-            throw new AuthorizerDomainException(BusinessError.ORIGINAL_CARD_NOT_FOUND, "original card must exist");
-        }
-
-        return originalCard.get();
+        return card;
     }
 
     public void restoreLimit(final Card card, final BigDecimal paymentAmount) {
-        try {
-            card.addToAvailableLimit(paymentAmount);
-            this.save(card);
-        } catch (Exception e) {
-            throw AuthorizerDomainException.fromException(e);
-        }
+        card.addToAvailableLimit(paymentAmount);
+        this.cardRepository.save(card);
     }
 
-    public void save(Card card) {
-        this.cardRepository.save(card);
+    public void applyCancellationRules(final Card card) {
+        var since = LocalDateTime.now().minus(Duration.ofDays(MAX_CANCELLATION_PERIOD_IN_DAYS));
+        var cancellationCount = this.cancellationService.count(card, since);
+
+        if(cancellationCount > MAX_CANCELLATION_COUNT) {
+            card.block();
+            this.cardRepository.save(card);
+        }
     }
 }
