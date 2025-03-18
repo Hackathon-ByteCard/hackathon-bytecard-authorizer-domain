@@ -1,8 +1,11 @@
 package com.bytecode.authorizer_domain.authorization;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Optional;
 
+@Getter
 public enum AuthorizationStatus {
     PENDING("pending"),
     POSTED("posted"),
