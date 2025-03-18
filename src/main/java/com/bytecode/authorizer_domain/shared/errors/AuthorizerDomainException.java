@@ -1,7 +1,5 @@
 package com.bytecode.authorizer_domain.shared.errors;
 
-import com.bytecode.authorizer_domain.shared.bus.EventPublisher;
-import com.bytecode.authorizer_domain.shared.bus.events.ErrorEvent;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -9,19 +7,6 @@ import java.time.LocalDateTime;
 @Getter
 public class AuthorizerDomainException extends RuntimeException {
     private final BusinessError businessError;
-
-    public AuthorizerDomainException(BusinessError businessError, String details, Exception e) {
-        super(
-                String.format(
-                        "[%s] (%s) - %s",
-                        LocalDateTime.now(),
-                        businessError.getCode(),
-                        details
-                ),
-                e
-        );
-        this.businessError = businessError;
-    }
 
     public AuthorizerDomainException(BusinessError businessError, String details) {
         super(
@@ -31,6 +16,19 @@ public class AuthorizerDomainException extends RuntimeException {
                         businessError.getCode(),
                         details
                 )
+        );
+        this.businessError = businessError;
+    }
+
+    private AuthorizerDomainException(BusinessError businessError, String details, Exception e) {
+        super(
+                String.format(
+                        "[%s] (%s) - %s",
+                        LocalDateTime.now(),
+                        businessError.getCode(),
+                        details
+                ),
+                e
         );
         this.businessError = businessError;
     }
@@ -48,7 +46,6 @@ public class AuthorizerDomainException extends RuntimeException {
             );
         }
 
-        EventPublisher.publish(new ErrorEvent(authorizerDomainException));
         return authorizerDomainException;
     }
 }

@@ -5,6 +5,9 @@ import com.bytecode.authorizer_domain.authorization.AuthorizationService;
 import com.bytecode.authorizer_domain.card.Card;
 import com.bytecode.authorizer_domain.card.CardService;
 import com.bytecode.authorizer_domain.conciliation.ConciliationService;
+import com.bytecode.authorizer_domain.shared.bus.EventPublisher;
+import com.bytecode.authorizer_domain.shared.bus.events.ErrorEvent;
+import com.bytecode.authorizer_domain.shared.errors.AuthorizerDomainException;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -18,22 +21,49 @@ public class Authorizer {
     private final ConciliationService conciliationService;
 
     public void authorize(final Card card, final Authorization authorization) {
-        this.authorizationService.authorize(card, authorization);
+        try {
+            this.authorizationService.authorize(card, authorization);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
     }
 
     public void conciliate(final Card card, final Authorization authorization) {
-        this.conciliationService.conciliate(card, authorization);
+        try {
+            this.conciliationService.conciliate(card, authorization);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
     }
 
     public void restoreLimit(final Card card, final BigDecimal paymentAmount) {
-        this.cardService.restoreLimit(card, paymentAmount);
+        try {
+            this.cardService.restoreLimit(card, paymentAmount);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
     }
 
     public Optional<Authorization> findAuthorization(final UUID authorizationCode) {
-        return this.authorizationService.findAuthorization(authorizationCode);
+        try {
+            return this.authorizationService.findAuthorization(authorizationCode);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
     }
 
     public Optional<Card> findCard(final UUID pan) {
-        return this.cardService.findCard(pan);
+        try {
+            return this.cardService.findCard(pan);
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+    }
+
+    private AuthorizerDomainException handleException(Exception e) {
+        var authorizerDomainException = AuthorizerDomainException.fromException(e);
+        var event = new ErrorEvent(authorizerDomainException);
+        EventPublisher.publish(event);
+        return authorizerDomainException;
     }
 }

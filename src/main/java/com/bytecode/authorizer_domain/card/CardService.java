@@ -2,8 +2,6 @@ package com.bytecode.authorizer_domain.card;
 
 import com.bytecode.authorizer_domain.authorization.Authorization;
 import com.bytecode.authorizer_domain.conciliation.CancellationService;
-import com.bytecode.authorizer_domain.shared.errors.AuthorizerDomainException;
-import com.bytecode.authorizer_domain.shared.errors.BusinessError;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
