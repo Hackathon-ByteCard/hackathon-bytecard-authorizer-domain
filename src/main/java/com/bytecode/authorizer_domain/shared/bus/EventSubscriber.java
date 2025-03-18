@@ -1,6 +1,6 @@
-package com.bytecode.authorizer_domain.events;
+package com.bytecode.authorizer_domain.shared.bus;
 
-import com.bytecode.authorizer_domain.events.impls.DomainEvent;
+import com.bytecode.authorizer_domain.shared.bus.events.DomainEvent;
 
 public interface EventSubscriber {
     /// Should not block, please enqueue the event processing if possible

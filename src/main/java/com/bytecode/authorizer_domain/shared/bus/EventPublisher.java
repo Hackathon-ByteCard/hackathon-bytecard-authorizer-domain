@@ -1,6 +1,6 @@
-package com.bytecode.authorizer_domain.events;
+package com.bytecode.authorizer_domain.shared.bus;
 
-import com.bytecode.authorizer_domain.events.impls.DomainEvent;
+import com.bytecode.authorizer_domain.shared.bus.events.DomainEvent;
 
 import java.util.ArrayList;
 import java.util.List;

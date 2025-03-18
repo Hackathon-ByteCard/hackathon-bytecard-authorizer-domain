@@ -1,6 +1,6 @@
-package com.bytecode.authorizer_domain.events.impls;
+package com.bytecode.authorizer_domain.shared.bus.events;
 
-import com.bytecode.authorizer_domain.errors.AuthorizerDomainException;
+import com.bytecode.authorizer_domain.shared.errors.AuthorizerDomainException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

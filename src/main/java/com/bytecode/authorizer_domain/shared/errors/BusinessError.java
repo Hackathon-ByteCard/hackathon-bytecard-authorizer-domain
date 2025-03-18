@@ -1,4 +1,4 @@
-package com.bytecode.authorizer_domain.errors;
+package com.bytecode.authorizer_domain.shared.errors;
 
 import lombok.Getter;
 
@@ -13,7 +13,9 @@ public enum BusinessError {
     BLOCKED_CARD("blocked-card", ErrorNature.FUNCTIONAL),
     INVALID_PAYMENT_AMOUNT("invalid-payment-amount", ErrorNature.FUNCTIONAL),
     ORIGINAL_AUTHORIZATION_NOT_FOUND("original-authorization-not-found", ErrorNature.FUNCTIONAL),
-    INVALID_AVAILABLE_LIMIT("invalid-available-limit", ErrorNature.FUNCTIONAL);
+    INVALID_AVAILABLE_LIMIT("invalid-available-limit", ErrorNature.FUNCTIONAL),
+    ORIGINAL_CARD_NOT_FOUND("original-card-not-found", ErrorNature.FUNCTIONAL),
+    INVALID_CANCELLATION_TIME("invalid-cancellation-time", ErrorNature.FUNCTIONAL);
 
     private String code;
     private ErrorNature nature;

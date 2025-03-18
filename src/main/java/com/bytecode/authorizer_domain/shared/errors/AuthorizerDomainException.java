@@ -1,7 +1,7 @@
-package com.bytecode.authorizer_domain.errors;
+package com.bytecode.authorizer_domain.shared.errors;
 
-import com.bytecode.authorizer_domain.events.EventPublisher;
-import com.bytecode.authorizer_domain.events.impls.ErrorEvent;
+import com.bytecode.authorizer_domain.shared.bus.EventPublisher;
+import com.bytecode.authorizer_domain.shared.bus.events.ErrorEvent;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

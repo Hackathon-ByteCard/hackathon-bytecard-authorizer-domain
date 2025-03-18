@@ -1,6 +1,4 @@
-package com.bytecode.authorizer_domain.repositories;
-
-import com.bytecode.authorizer_domain.entities.Authorization;
+package com.bytecode.authorizer_domain.authorization;
 
 import java.util.Optional;
 import java.util.UUID;
