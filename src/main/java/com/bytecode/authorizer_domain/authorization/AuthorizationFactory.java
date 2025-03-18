@@ -11,27 +11,49 @@ import java.util.UUID;
 public class AuthorizationFactory {
     public static Authorization newAuthorization(final BigDecimal amount,
                                                  final String description,
-                                                 final LocalDateTime time) {
+                                                 final LocalDateTime time,
+                                                 final UUID pan) {
         var code = UUID.randomUUID();
-        validateAuthorization(amount, description, time, code);
-        return new Authorization(amount, description, time, UUID.randomUUID());
+        validateAuthorization(amount, description, time, AuthorizationStatus.PENDING, code, pan);
+
+        return new Authorization(
+                amount,
+                description,
+                time,
+                AuthorizationStatus.PENDING,
+                code,
+                pan
+        );
     }
 
     public static Authorization create(final BigDecimal amount,
-                                            final String description,
-                                            final LocalDateTime time,
-                                            final UUID code) {
-        validateAuthorization(amount, description, time, code);
-        return new Authorization(amount, description, time, code);
+                                       final String description,
+                                       final LocalDateTime time,
+                                       final AuthorizationStatus status,
+                                       final UUID code,
+                                       final UUID pan) {
+        validateAuthorization(amount, description, time, status, code, pan);
+        return new Authorization(amount, description, time, status, code, pan);
     }
 
     private static void validateAuthorization(final BigDecimal amount,
-                                         final String description,
-                                         final LocalDateTime time,
-                                         final UUID code) {
+                                              final String description,
+                                              final LocalDateTime time,
+                                              final AuthorizationStatus status,
+                                              final UUID code,
+                                              final UUID pan) {
         if (Objects.isNull(code)) {
-            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "cannot deserialize with null code");
+            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "code must not be null");
         }
+
+        if(Objects.isNull(pan)) {
+            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "pan must not be null");
+        }
+
+        if(Objects.isNull(status)) {
+            throw new AuthorizerDomainException(BusinessError.INVARIANT_CONSTRAINT_ERROR, "status must no be null");
+        }
+
         validateAuthorizationAmount(amount);
         validateDescription(description);
         validateTime(time);
