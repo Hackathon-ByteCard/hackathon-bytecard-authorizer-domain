@@ -17,7 +17,7 @@ public class AuthorizationFactory {
         return new Authorization(amount, description, time, UUID.randomUUID());
     }
 
-    public static Authorization deserialize(final BigDecimal amount,
+    public static Authorization create(final BigDecimal amount,
                                             final String description,
                                             final LocalDateTime time,
                                             final UUID code) {

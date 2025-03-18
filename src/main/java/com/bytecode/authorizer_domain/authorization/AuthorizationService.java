@@ -7,7 +7,6 @@ import com.bytecode.authorizer_domain.shared.errors.BusinessError;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class AuthorizationService {

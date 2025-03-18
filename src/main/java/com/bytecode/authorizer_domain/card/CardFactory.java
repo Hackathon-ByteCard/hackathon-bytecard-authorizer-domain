@@ -14,7 +14,7 @@ public class CardFactory {
         return new Card(UUID.randomUUID(), totalLimit, null);
     }
 
-    public static Card deserialize(final UUID pan, final BigDecimal availableLimit, final LocalDateTime blockedSince) {
+    public static Card create(final UUID pan, final BigDecimal availableLimit, final LocalDateTime blockedSince) {
         validateCard(pan, availableLimit, blockedSince);
         return new Card(pan, availableLimit,blockedSince);
     }
