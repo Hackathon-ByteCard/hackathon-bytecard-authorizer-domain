@@ -27,5 +27,7 @@ public class Authorization {
         this.status = status;
         this.code = code;
         this.pan = pan;
+
+        AuthorizationSpecification.satisfyOrThrow(this);
     }
 }
