@@ -1,11 +1,7 @@
 package com.bytecard.domain.authorization;
 
-import com.bytecard.domain.shared.errors.AuthorizerDomainException;
-import com.bytecard.domain.shared.errors.BusinessError;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 public class AuthorizationFactory {
